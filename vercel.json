@@ -5,6 +5,6 @@
     { "src": "resume-match-server/api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "baresume-match-server/api/$1.js" }
+    { "src": "/api/(.*)", "dest": "resume-match-server/api/$1.js" }
   ]
 }
