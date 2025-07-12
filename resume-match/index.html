@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeMatch - Professional Resume Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>ResumeMatch</h1>
+            <p class="header-subtitle">Professional Resume Analysis & Job Tracking Platform</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="resume">Resume Editor</button>
+            <button class="nav-tab" data-tab="tracker">Job Tracker</button>
+            <button class="nav-tab" data-tab="analytics">Analytics</button>
+        </nav>
+
+        <!-- Resume Editor Tab -->
+        <div class="tab-content active" id="resume-tab">
+            <div class="resume-layout">
+                <!-- Resume Editor -->
+                <div class="resume-editor">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Resume Editor</h2>
+                            <button class="btn btn-primary" id="export-pdf">
+                                <span>📄</span> Download PDF
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <!-- Personal Info -->
+                            <div class="resume-section">
+                                <h3>Personal Information</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" id="name" value="Nikolay Bonapartov">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Location</label>
+                                        <input type="text" id="location" value="Porto, Portugal">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phone</label>
+                                        <input type="text" id="phone" value="+351913982737">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="email" value="bonapartov@gmail.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>LinkedIn</label>
+                                        <input type="text" id="linkedin" value="linkedin.com/in/nikolaybonapartov">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Summary -->
+                            <div class="resume-section">
+                                <h3>Professional Summary</h3>
+                                <div class="form-group">
+                                    <textarea id="summary" rows="4">Media Buyer with 6+ years of experience in data-driven online advertising, media buying, and project management. Expertise in performance marketing across multiple platforms including Meta, X (Twitter), TikTok, and Google Ads. Proven track record of scaling campaigns, optimizing ROI, and managing substantial advertising budgets.</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Work Experience -->
+                            <div class="resume-section">
+                                <h3>Work Experience</h3>
+                                <div id="experience-list"></div>
+                            </div>
+
+                            <!-- Skills -->
+                            <div class="resume-section">
+                                <h3>Skills</h3>
+                                <div class="skills-container" id="skills-container"></div>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="resume-section">
+                                <h3>Education</h3>
+                                <div class="form-group">
+                                    <label>Degree</label>
+                                    <input type="text" id="degree" value="Bachelor's Degree in Business Administration">
+                                </div>
+                                <div class="form-group">
+                                    <label>Institution</label>
+                                    <input type="text" id="institution" value="University of Economics">
+                                </div>
+                                <div class="form-group">
+                                    <label>Year</label>
+                                    <input type="text" id="graduation-year" value="2012">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Description & Analysis -->
+                <div class="analysis-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Job Description</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Paste Job Description</label>
+                                <textarea id="job-description" rows="8" placeholder="Paste the job description here..."></textarea>
+                            </div>
+                            <button class="btn btn-primary btn-full" id="analyze-btn">
+                                <span>🔍</span> Analyze Match
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Results -->
+                    <div class="card" id="analysis-results" style="display: none;">
+                        <div class="card-header">
+                            <h2>Analysis Results</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="match-score">
+                                <div class="score-circle">
+                                    <canvas id="match-chart" width="150" height="150"></canvas>
+                                    <div class="score-text">
+                                        <span id="match-percentage">0%</span>
+                                        <small>Match</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="category-scores">
+                                <div class="category-item">
+                                    <span>Skills</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="skills-progress"></div>
+                                    </div>
+                                    <span id="skills-score">0%</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Experience</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="experience-progress"></div>
+                                    </div>
+                                    <span id="experience-score">0%</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Education</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="education-progress"></div>
+                                    </div>
+                                    <span id="education-score">0%</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Industry</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="industry-progress"></div>
+                                    </div>
+                                    <span id="industry-score">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="missing-keywords">
+                                <h4>Missing Keywords</h4>
+                                <div id="missing-keywords-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Tracker Tab -->
+        <div class="tab-content" id="tracker-tab">
+            <div class="job-tracker">
+                <div class="tracker-header">
+                    <h2>Job Application Tracker</h2>
+                    <button class="btn btn-primary" id="add-job-btn">
+                        <span>➕</span> Add Job
+                    </button>
+                </div>
+                <div class="kanban-board" id="kanban-board">
+                    <div class="kanban-column" data-status="saved">
+                        <div class="column-header">
+                            <h3>Saved</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="saved-jobs"></div>
+                    </div>
+                    <div class="kanban-column" data-status="applying">
+                        <div class="column-header">
+                            <h3>Applying</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="applying-jobs"></div>
+                    </div>
+                    <div class="kanban-column" data-status="applied">
+                        <div class="column-header">
+                            <h3>Applied</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="applied-jobs"></div>
+                    </div>
+                    <div class="kanban-column" data-status="interview">
+                        <div class="column-header">
+                            <h3>Interview</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="interview-jobs"></div>
+                    </div>
+                    <div class="kanban-column" data-status="negotiating">
+                        <div class="column-header">
+                            <h3>Negotiating</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="negotiating-jobs"></div>
+                    </div>
+                    <div class="kanban-column" data-status="accepted">
+                        <div class="column-header">
+                            <h3>Accepted</h3>
+                            <span class="job-count">0</span>
+                        </div>
+                        <div class="job-cards" id="accepted-jobs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analytics-tab">
+            <div class="analytics-panel">
+                <h2>Analytics Dashboard</h2>
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Application Statistics</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="application-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Match Score Trends</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="trends-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Jobs -->
+    <div class="modal" id="job-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Job</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" id="job-company" placeholder="Company name">
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <input type="text" id="job-position" placeholder="Job title">
+                </div>
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input type="text" id="job-salary" placeholder="e.g., $70,000 - $90,000">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="job-location" placeholder="e.g., Remote, New York, NY">
+                </div>
+                <div class="form-group">
+                    <label>Priority</label>
+                    <select id="job-priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="job-status">
+                        <option value="saved">Saved</option>
+                        <option value="applying">Applying</option>
+                        <option value="applied">Applied</option>
+                        <option value="interview">Interview</option>
+                        <option value="negotiating">Negotiating</option>
+                        <option value="accepted">Accepted</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-job">Cancel</button>
+                <button class="btn btn-primary" id="save-job">Save Job</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
