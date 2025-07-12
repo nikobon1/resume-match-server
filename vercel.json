@@ -1,10 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "resume-match/package.json", "use": "@vercel/static-build" },
-    { "src": "resume-match-server/api/**/*.js", "use": "@vercel/node" }
+    { "src": "resume-match/package.json",           "use": "@vercel/static-build" },
+    { "src": "resume-match-server/api/**/*.js",      "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "resume-match-server/api/$1.js" }
+    // 1) Преобразуем API-запросы в serverless-функции:
+    { "src": "/api/(.*)", "dest": "resume-match-server/api/$1.js" },
+    // 2) Всё остальное — отдать из папки сборки фронтенда:
+    { "src": "/(.*)",     "dest": "resume-match/build/$1" }
   ]
 }
