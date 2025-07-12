@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "resume-match/package.json", "use": "@vercel/static-build" },
+    { "src": "resume-match-server/api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "baresume-match-server/api/$1.js" }
+  ]
+}
