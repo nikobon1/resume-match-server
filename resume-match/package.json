@@ -104,11 +104,11 @@
     "yoga-layout": "^2.0.1"
   },
   "scripts": {
-    "dev": "next dev",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -1,0 +1,10 @@
+"use strict";(()=>{var e={};e.id=516,e.ids=[516],e.modules={145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},79:e=>{e.exports=import("openai")},249:(e,t)=>{Object.defineProperty(t,"l",{enumerable:!0,get:function(){return function e(t,n){return n in t?t[n]:"then"in t&&"function"==typeof t.then?t.then(t=>e(t,n)):"function"==typeof t&&"default"===n?t:void 0}}})},526:(e,t,n)=>{n.a(e,async(e,r)=>{try{n.r(t),n.d(t,{config:()=>d,default:()=>c,routeModule:()=>p});var a=n(802),i=n(153),s=n(249),o=n(649),u=e([o]);o=(u.then?(await u)():u)[0];let c=(0,s.l)(o,"default"),d=(0,s.l)(o,"config"),p=new a.PagesAPIRouteModule({definition:{kind:i.x.PAGES_API,page:"/api/analyze",pathname:"/api/analyze",bundlePath:"",filename:""},userland:o});r()}catch(e){r(e)}})},649:(e,t,n)=>{n.a(e,async(e,r)=>{try{n.r(t),n.d(t,{default:()=>s});var a=n(79),i=e([a]);async function s(e,t){if("POST"!==e.method)return t.status(405).end();let{resume:n,jobDescription:r}=e.body,i=new a.Configuration({apiKey:process.env.OPENAI_API_KEY}),s=new a.OpenAIApi(i),o=`
+Analyze the match between this resume and job description.
+Return a JSON with:
+- matchPercentage (0-100)
+- missingKeywords (array)
+- categoryScores: { skills, experience, education, industry }
+Resume: ${n}
+Job Description: ${r}
+Return format: {"matchPercentage": number, "missingKeywords": [array], "categoryScores": {"skills": number, "experience": number, "education": number, "industry": number}}
+`;try{let e=(await s.createChatCompletion({model:"gpt-4o",messages:[{role:"user",content:o}],max_tokens:1e3,temperature:.3})).data.choices[0].message.content,n=JSON.parse(e);t.status(200).json(n)}catch(e){t.status(500).json({error:"Failed to parse AI response",detail:e.message})}}a=(i.then?(await i)():i)[0],r()}catch(e){r(e)}})},153:(e,t)=>{var n;Object.defineProperty(t,"x",{enumerable:!0,get:function(){return n}}),function(e){e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE"}(n||(n={}))},802:(e,t,n)=>{e.exports=n(145)}};var t=require("../../webpack-api-runtime.js");t.C(e);var n=t(t.s=526);module.exports=n})();
